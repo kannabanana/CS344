@@ -1,0 +1,162 @@
+#Initializing - Cleaning up - ignore Operation Not Permitted errors
+./p4gradingscript: line 29: otp_enc_d: command not found
+./p4gradingscript: line 30: otp_dec_d: command not found
+
+#-----------------------------------------
+#START OF GRADING SCRIPT
+#keygen 20 > key20
+./p4gradingscript: line 38: keygen: command not found
+#5 POINTS: key20 must exist
+key20 DOES NOT EXIST
+
+#-----------------------------------------
+#5 POINTS: Number of characters in key20, should be 21:
+wc: key20: No such file or directory
+
+#-----------------------------------------
+#keygen 70000 > key70000
+./p4gradingscript: line 49: keygen: command not found
+#5 POINTS: Number of characters in key70000, should be 70001:
+wc: key70000: No such file or directory
+
+#-----------------------------------------
+#otp_enc plaintext1 key20 $encport
+#10 POINTS: Should return error about too-short key
+./p4gradingscript: line 57: otp_enc: command not found
+
+#-----------------------------------------
+#otp_enc plaintext1 key70000 $encport
+#20 POINTS: Should return encrypted version of plaintext1
+./p4gradingscript: line 62: otp_enc: command not found
+
+#-----------------------------------------
+#otp_enc plaintext1 key70000 $encport > ciphertext1
+./p4gradingscript: line 66: otp_enc: command not found
+#10 POINTS: ciphertext1 must exist
+ciphertext1 DOES NOT EXIST
+
+#-----------------------------------------
+#10 POINTS: ciphertext1 must be same number of chars as source
+#wc -m plaintext1
+37 plaintext1
+#Should be same: wc -m ciphertext1
+wc: ciphertext1: No such file or directory
+
+#-----------------------------------------
+#5 POINTS: ciphertext1 should look encrypted
+cat: ciphertext1: No such file or directory
+
+#-----------------------------------------
+#otp_dec ciphertext1 key70000 $encport
+#5 POINTS: Should fail giving error that otp_dec cannot use otp_enc_d
+./p4gradingscript: line 85: otp_dec: command not found
+
+#-----------------------------------------
+#20 POINTS: should return decrypted ciphertext1 that matches source
+#cat plaintext1
+THE RED GOOSE FLIES AT MIDNIGHT STOP
+#otp_dec ciphertext1 key70000 $decport
+./p4gradingscript: line 92: otp_dec: command not found
+
+#-----------------------------------------
+#otp_dec ciphertext1 key70000 $decport > plaintext1_a
+./p4gradingscript: line 96: otp_dec: command not found
+#10 POINTS: plaintext1_a must exist
+plaintext1_a DOES NOT EXIST
+
+#-----------------------------------------
+#cmp plaintext1 plaintext1_a
+#5 POINTS: plaintext1 must be the same as plaintext1_a:
+cmp: plaintext1_a: No such file or directory
+#echo $? should be == 0, which means the cmp succeeded!
+0
+
+#-----------------------------------------
+#20 POINTS: concurrent test of encryption - look for 4 properly-sized ciphertext# files, or 5 where the 5th is 0 bytes
+#5 POINTS: Should be only one error about plaintext5 being bad
+./p4gradingscript: line 113: otp_enc: command not found
+Ten second sleep, your program must complete in this time
+./p4gradingscript: line 114: otp_enc: command not found
+./p4gradingscript: line 115: otp_enc: command not found
+./p4gradingscript: line 116: otp_enc: command not found
+./p4gradingscript: line 117: otp_enc: command not found
+total 312
+drwxrwx---. 2 kannas upg60695  2048 Mar 14 11:57 ./
+drwxrwx---. 9 kannas upg60695  3072 Mar  8 09:46 ../
+-rwxrwxrwx. 1 kannas upg60695 10534 Mar 14 11:00 a.out
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext1
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext2
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext3
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext4
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext5
+-rwxrwxrwx. 1 kannas upg60695  1478 Mar  8 09:50 client.c
+-rwxrwxrwx. 1 kannas upg60695   120 Mar 14 11:53 compileall
+-rwxrwxrwx. 1 kannas upg60695     0 Mar 13 16:01 errors.txt
+-rwxrwxrwx. 1 kannas upg60695  2115 Mar  8 13:12 keygen.c
+-rwxrwxrwx. 1 kannas upg60695    37 Mar 12 11:25 mykey
+-rw-rw----. 1 kannas upg60695  3159 Mar 14 11:57 myresults
+-rwxrwx---. 1 kannas upg60695  9943 Mar 14 10:59 .nfs0000000003a32afa00001dd0
+-rwxrwx---. 1 kannas upg60695 10534 Mar 14 11:53 opt_dec
+-rw-rw----. 1 kannas upg60695  5085 Mar 14 11:52 opt_dec.c
+-rwxrwx---. 1 kannas upg60695  9943 Mar 14 11:53 opt_dec_d
+-rw-rw----. 1 kannas upg60695  4853 Mar 14 11:52 opt_dec_d.c
+-rwxrwx---. 1 kannas upg60695 10534 Mar 14 11:53 opt_enc
+-rwxrwxrwx. 1 kannas upg60695  4763 Mar 13 16:23 opt_enc2.c
+-rwxrwxrwx. 1 kannas upg60695  5085 Mar 14 11:13 opt_enc.c
+-rwxrwx---. 1 kannas upg60695  9943 Mar 14 11:53 opt_enc_d
+-rwxrwxrwx. 1 kannas upg60695  4853 Mar 13 14:05 opt_enc_d.c
+-rwxrwxrwx. 1 kannas upg60695  4987 Mar 13 16:42 p4gradingscript
+-rwxrwxrwx. 1 kannas upg60695    37 Mar  8 10:04 plaintext1
+-rwxrwxrwx. 1 kannas upg60695   317 Mar  8 10:04 plaintext2
+-rwxrwxrwx. 1 kannas upg60695    17 Mar  8 10:18 plaintext3
+-rwxrwxrwx. 1 kannas upg60695 69333 Mar  8 10:19 plaintext4
+-rwxrwxrwx. 1 kannas upg60695    42 Mar  8 10:19 plaintext5
+-rwxrwxrwx. 1 kannas upg60695  1589 Mar  8 09:52 server.c
+
+#-----------------------------------------
+#15 POINTS: concurrent test of decryption - look for 4 plaintext#_a files that match the plaintext# files
+./p4gradingscript: line 124: otp_dec: command not found
+#Ten second sleep, your program must complete in this time
+./p4gradingscript: line 125: otp_dec: command not found
+./p4gradingscript: line 127: otp_dec: command not found
+total 312
+drwxrwx---. 2 kannas upg60695  2048 Mar 14 11:57 ./
+drwxrwx---. 9 kannas upg60695  3072 Mar  8 09:46 ../
+-rwxrwxrwx. 1 kannas upg60695 10534 Mar 14 11:00 a.out
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext1
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext2
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext3
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext4
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 ciphertext5
+-rwxrwxrwx. 1 kannas upg60695  1478 Mar  8 09:50 client.c
+-rwxrwxrwx. 1 kannas upg60695   120 Mar 14 11:53 compileall
+-rwxrwxrwx. 1 kannas upg60695     0 Mar 13 16:01 errors.txt
+-rwxrwxrwx. 1 kannas upg60695  2115 Mar  8 13:12 keygen.c
+-rwxrwxrwx. 1 kannas upg60695    37 Mar 12 11:25 mykey
+-rw-rw----. 1 kannas upg60695  5394 Mar 14 11:57 myresults
+-rwxrwx---. 1 kannas upg60695  9943 Mar 14 10:59 .nfs0000000003a32afa00001dd0
+-rwxrwx---. 1 kannas upg60695 10534 Mar 14 11:53 opt_dec
+-rw-rw----. 1 kannas upg60695  5085 Mar 14 11:52 opt_dec.c
+-rwxrwx---. 1 kannas upg60695  9943 Mar 14 11:53 opt_dec_d
+-rw-rw----. 1 kannas upg60695  4853 Mar 14 11:52 opt_dec_d.c
+-rwxrwx---. 1 kannas upg60695 10534 Mar 14 11:53 opt_enc
+-rwxrwxrwx. 1 kannas upg60695  4763 Mar 13 16:23 opt_enc2.c
+-rwxrwxrwx. 1 kannas upg60695  5085 Mar 14 11:13 opt_enc.c
+-rwxrwx---. 1 kannas upg60695  9943 Mar 14 11:53 opt_enc_d
+-rwxrwxrwx. 1 kannas upg60695  4853 Mar 13 14:05 opt_enc_d.c
+-rwxrwxrwx. 1 kannas upg60695  4987 Mar 13 16:42 p4gradingscript
+-rwxrwxrwx. 1 kannas upg60695    37 Mar  8 10:04 plaintext1
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 plaintext1_a
+-rwxrwxrwx. 1 kannas upg60695   317 Mar  8 10:04 plaintext2
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 plaintext2_a
+-rwxrwxrwx. 1 kannas upg60695    17 Mar  8 10:18 plaintext3
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 plaintext3_a
+-rwxrwxrwx. 1 kannas upg60695 69333 Mar  8 10:19 plaintext4
+-rw-rw----. 1 kannas upg60695     0 Mar 14 11:57 plaintext4_a
+-rwxrwxrwx. 1 kannas upg60695    42 Mar  8 10:19 plaintext5
+-rwxrwxrwx. 1 kannas upg60695  1589 Mar  8 09:52 server.c
+
+#-----------------------------------------
+#Cleaning up - ignore Operation Not Permitted errors
+
+#SCRIPT COMPLETE
