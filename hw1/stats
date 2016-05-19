@@ -1,0 +1,526 @@
+#!/bin/bash
+
+#HW1
+#Operating Systems
+#1/10/2016
+
+#Program 1: This program will take the a optional file input. The user  will specify whether the program will calculate the  median and average of the columns or rows. The rows and columns will be of the same number. The stat input would be state {-row|-column} [file]. 
+
+
+#create a function for file input
+#function for file input
+
+
+
+#this function reads file input
+#the function takes a  file as  function parameters
+
+clean_up()
+{
+	rm -f 1*				#the temp files all begin with a number (* star is a wild card)
+	rm -f column_file			#remove all the tempfiles
+	rm -f row_file
+	rm -f row_file/*
+	rm -f 2*
+	rm -f 3*
+	rm -f 4*
+	rm -f 5*
+	rm -f 6*
+	rm -f 7*
+	rm -f 8*
+	rm -f 9*	
+
+
+	exit 1
+
+}
+
+trap clean_up SIGINT SIGHUP SIGTERM SIGKILL	
+
+#remove files	
+removefiles()
+{
+	rm -f row_file*
+	rm -f row_file/*
+	rm -f 1*				#the temp files all begin with a number (* star is a wild card)
+	rm -f 2*
+	rm -f 3*
+	rm -f 4*
+	rm -f 5*
+	rm -f 6*
+	rm -f 7*
+	rm -f 8*
+	rm -f 9*	
+}
+
+TMP2=./TMP2
+
+read_in()
+{
+
+	#reading inside the the text file
+	while read line
+	do
+	temp=1
+	sum=0				#sum variable for the sum of the row
+	count=0				#count variable for the count of the row
+		for i in $line		#for loop through the row
+		do
+			for k in $i	#break down each line into each number
+			do
+				count=$((count+1))
+				sum=$(($sum+$k))
+				echo -e "$k" >> row_file			#spit out each number into a text file with a new linea after to sort, -n for no new line
+				
+				#echo -e "\n" >> row_file
+			done
+		done
+	
+
+		cat row_file | tr '\n' '\t' > "$tempRow$$"
+		echo -e " " >> "$tempRow$$"
+		
+		cut_factor=$(($count*2))		#cut factor goes up by numbers of 2
+		mod=$(($count%2))
+
+	if [ $mod -eq 0 ]			#even meidan so it won't work, so add one
+	then
+
+		cut_factor=$(($cut_factor-1))
+		column_count2=$(($count+1))			
+
+		mid=$(($count/2))	#to determine the middle
+		temp=$(($mid+2))
+		
+	#	for((i=1;i<$mid;++i));			#this for loop loops through and convers the given mid point into an "odd equivlent for the cut function"
+	#	do
+	#		temp=$(($temp+2))
+	#	done
+	#	echo "temp is $temp"
+	
+		
+		#count2=$(($temp+1))
+			
+		
+		median1=$(cut -f 1-$cut_factor $tempRow$$ | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+
+		printf $median1
+		
+	
+		#echo "median1 is $meidan1 "			#this is would be the code to find the real median, but the professor only wanted us to find the greater of the two numbers
+		#echo "median2 is $median2 "
+		#summedian=$((median1+$median2))
+		#official=$((summedian/2))
+		#echo "the median is $official"
+
+	else
+		cut_factor=$(($cut_factor-1))		
+		column_count2=$(($count+1))			
+
+		mid=$(($column_count2/2))	#to determine the middle
+		if [[ $mid -eq "1" ]]		
+		then
+			median=$(cut -f 1-$cut_factor $tempRow$$ | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+			printf "$median"
+		else
+			temp=1
+			for((i=1;i<$mid;++i));
+			do
+				temp=$(($temp+2))
+			done
+			temp=$(($temp-1))
+	
+			median=$(cut -f 1-$cut_factor $tempRow$$ | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+			printf "$median"
+
+
+		fi
+		fi
+
+			rm -f row_file/*					#remove all  temporary files with any extentions
+			rm -f row_file
+			rm -f new_row_file
+			rm -f new_row_file/*
+	rm -f 1*				#the temp files all begin with a number (* star is a wild card)
+	rm -f 2*
+	rm -f 3*
+	rm -f 4*
+	rm -f 5*
+	rm -f 6*
+	rm -f 7*
+	rm -f 8*
+	rm -f 9*	
+
+		half=$((count/2))
+		average=$(((sum+half)/count))						#calculate averages 
+		printf "\t $average \n"
+	
+	done < $2
+
+}
+
+
+
+#function to for stdin
+read_in3()
+{
+
+	#reading inside the the text file
+	while read line
+	do
+	temp=1
+	sum=0				#sum variable for the sum of the row
+	count=0				#count variable for the count of the row
+		for i in $line		#for loop through the row
+		do
+			for k in $i	#break down each line into each number
+			do
+				count=$((count+1))
+				sum=$(($sum+$k))
+				echo -e "$k" >> row_file			#spit out each number into a text file with a new linea after to sort, -n for no new line
+				
+				#echo -e "\n" >> row_file
+			done
+		done
+	
+
+		cat row_file | tr '\n' '\t' > "$tempRow$$"
+		echo -e " " >> "$tempRow$$"
+		
+		cut_factor=$(($count*2))		#cut factor goes up by numbers of 2
+		mod=$(($count%2))
+
+	if [ $mod -eq 0 ]			#even meidan so it won't work, so add one
+	then
+		cut_factor=$(($cut_factor-1))
+		column_count2=$(($count+1))			
+
+		mid=$(($count/2))	#to determine the middle
+		temp=$(($mid+2))
+		
+	#	for((i=1;i<$mid;++i));			#this for loop loops through and convers the given mid point into an "odd equivlent for the cut function"
+	#	do
+	#		temp=$(($temp+2))
+	#	done
+	#	echo "temp is $temp"
+	
+		
+		#count2=$(($temp+1))
+			
+		
+		median1=$(cut -f 1-$cut_factor $tempRow$$ | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+
+		printf "$median1"
+		
+	
+		#echo "median1 is $meidan1 "			#this is would be the code to find the real median, but the professor only wanted us to find the greater of the two numbers
+		#echo "median2 is $median2 "
+		#summedian=$((median1+$median2))
+		#official=$((summedian/2))
+		#echo "the median is $official"
+
+	else
+		cut_factor=$(($cut_factor-1))		
+		column_count2=$(($count+1))			
+
+		mid=$(($column_count2/2))	#to determine the middle
+		if [[ $mid -eq "1" ]]		
+		then
+			median=$(cut -f 1-$cut_factor $tempRow$$ | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+			printf "$median"
+		else
+			temp=1
+			for((i=1;i<$mid;++i));
+			do
+				temp=$(($temp+2))
+			done
+			temp=$(($temp-1))
+	
+			median=$(cut -f 1-$cut_factor $tempRow$$ | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+			printf "$median"
+
+		fi
+		fi
+
+			rm -f row_file/*					#remove all  temporary files with any extentions
+			rm -f row_file
+			rm -f new_row_file
+			rm -f new_row_file/*
+	rm -f 1*				#the temp files all begin with a number (* star is a wild card)
+	rm -f 2*
+	rm -f 3*
+	rm -f 4*
+	rm -f 5*
+	rm -f 6*
+	rm -f 7*
+	rm -f 8*
+	rm -f 9*	
+
+		half=$((count/2))
+		average=$(((sum+half)/count))						#calculate averages 
+		printf "\t $average \n"
+	
+	done < $1
+
+}
+
+
+#this function returns the count of the number of rows
+count_fun()
+{
+	while read line
+	do
+	count=0
+		for i in $line
+		do 
+			for k in $i
+			do
+				count=$((count+1))
+		
+			done
+		done
+	done < $2
+	return $count
+}
+
+
+
+#the count function for the stdin
+count_fun3()
+{
+	while read line
+	do
+	count=0
+		for i in $line
+		do 
+			for k in $i
+			do
+				count=$((count+1))
+		
+			done
+		done
+	done < $1
+	return $count
+}
+
+
+
+#function for stdin
+column3()
+{
+for((j=1;j<=$count;++j));
+do
+	cut_factor=$(($column_count*2))		#cut factor goes up by numbers of 2
+	mod=$(($column_count%2))
+
+	if [ $mod -eq 0 ]			#even meidan so it won't work, so add one
+	then
+
+		total=$(($column_count*$count))		#the total (count multiplied by the columns)
+
+		cut_factor=$(($cut_factor-1))
+		column_count2=$(($column_count+1))			
+
+		mid=$(($column_count2/2))	#to determine the middle
+		temp=$((mid+1))	
+		median=$(cat $1| cut -f $j | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+		printf "$median"
+			
+
+	else
+		cut_factor=$(($cut_factor-1))		
+		column_count2=$(($column_count+1))			
+
+
+		mid=$(($column_count2/2))	#to determine the middle
+		temp=1
+		for((i=1;i<$mid;++i));
+		do
+			temp=$(($temp+2))
+		done
+		
+
+			median=$(cat $1| cut -f $j | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $mid)
+		printf "$median"
+
+	
+
+
+	fi
+
+
+	average=0
+	for((b=1;b<=$column_count;++b));				#for loop to for the $count variable 
+	do
+		placeholder=$(cat $1| cut -f $j | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $b)
+		average=$(($average+$placeholder))
+	done
+
+	
+	half_row=$((column_count/2))
+	final_average=$(((average+half_row)/column_count))
+	printf "\t $final_average \n"		#output the average for the given column
+done
+
+#	rm -f 1*				#the temp files all begin with a number (* star is a wild card)
+#	rm -f column_file			#remove all the tempfiles
+#	rm -f 2*
+#	rm -f 3*
+#	rm -f 4*
+#	rm -f 5*
+#	rm -f 6*
+#	rm -f 7*
+#	rm -f 8*
+#	rm -f 9*
+}
+
+
+
+column2()
+{
+for((j=1;j<=$count;++j));
+do
+	cut_factor=$(($column_count*2))		#cut factor goes up by numbers of 2
+	mod=$(($column_count%2))
+
+	if [ $mod -eq 0 ]			#even meidan so it won't work, so add one
+	then
+
+		total=$(($column_count*$count))		#the total (count multiplied by the columns)
+
+		cut_factor=$(($cut_factor-1))
+		column_count2=$(($column_count+1))			
+
+		mid=$(($column_count2/2))	#to determine the middle
+		temp=$((mid+1))	
+		median=$(cat $2| cut -f $j | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $temp)
+		printf "$median"
+			
+
+	else
+		cut_factor=$(($cut_factor-1))		
+		column_count2=$(($column_count+1))			
+
+		mid=$(($column_count2/2))	#to determine the middle
+		temp=1
+		for((i=1;i<$mid;++i));
+		do
+			temp=$(($temp+2))
+		done
+		
+
+			median=$(cat $2| cut -f $j | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $mid)
+		printf "$median"
+
+	
+
+
+	fi
+
+
+	average=0
+	for((b=1;b<=$column_count;++b));				#for loop to for the $count variable 
+	do
+		placeholder=$(cat $2| cut -f $j | tr "\t" "\n" | sort -n | tr "\n" "\t" | cut -f $b)
+		average=$(($average+$placeholder))
+	done
+
+	
+	half_row=$((column_count/2))
+	final_average=$(((average+half_row)/column_count))
+	printf "\t $final_average \n"		#output the average for the given column
+	rm -f 1*				#the temp files all begin with a number (* star is a wild card)
+	rm -f column_file			#remove all the tempfiles
+	rm -f 2*
+	rm -f 3*
+	rm -f 4*
+	rm -f 5*
+	rm -f 6*
+	rm -f 7*
+	rm -f 8*
+	rm -f 9*
+
+done
+
+}
+
+file=$2
+userchoice=$1
+
+#determines the number of arguments and calls the specific functions
+#there is a file
+
+if [[ "$#" == "1" ]]
+then
+	#gets the standard input from the user 
+	if [[ -z "$2" ]];
+	then
+		stdFileName=$$'.stdInputCheckFile.tmp'
+		cat	> "$stdFileName"
+		filename=$stdFileName
+	fi
+
+		
+	#assign the user's choice to the file
+	if [[ $userchoice == '-c'* ]]
+		then
+	#		echo "the filename contents is"
+	#		cat $filename
+			printf "Median \t Average \n"
+			printf "\n"
+			column_count=$(cat $filename | wc -l)
+			count_fun3 $filename
+			count=$?
+			column3 $filename $count $column_count
+			removefiles
+		
+		elif [[ $userchoice == '-r'* ]]
+		then
+			printf "Median \t Average \n"
+			printf "\n"
+			read_in3 $filename
+			removefiles
+		else
+				>&2 echo "Usage: stats {-rows|-cols} [file]"
+				exit 1
+	fi
+
+
+elif [[ "$#" == "2" ]]
+then
+	if [[ -r "$2" ]];
+	then	
+		if [[ $userchoice == '-c'* ]]
+		then
+			printf "Median \t Average \n"
+			printf "\n"
+			column_count=$(cat $2 | wc -l)
+			count_fun $2 $2
+			count=$?
+			column2 $2 $2 $count $column_count
+			removefiles
+
+		elif [[ $userchoice == '-r'* ]]
+		then
+			printf "Median \t Average \n"
+			printf "\n"
+			read_in $2 $2
+			removefiles
+		else
+				>&2 echo "Usage: stats {-rows|-cols} [file]"
+				exit 1
+		fi
+
+	else
+		>&2 echo "Usage: stats {-rows|-cols} [file]"	
+		exit 1	
+
+	fi
+else
+	>&2 echo "Usage: stats {-rows|-cols} [file]"	
+	exit 1
+fi
+
+
+
+#program exit
